@@ -1,0 +1,22 @@
+.search {
+  width: 500px;
+  height: 30px;
+  position: absolute;
+  text-indent: 15px;
+  top: 30%;
+  left: 50%;
+  transform: translate(-50%, -30%);
+  border: none;
+  border-radius: 15px;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
+  outline: none;
+  background: url("/webpage/search.svg"), url("/webpage/mic-fill.svg");
+  background-repeat: no-repeat, no-repeat;
+  background-position: 450px, 470px;
+  background-size: 14px;
+  background: red;
+}
+
+#table {
+  margin-top: 300px;
+}
