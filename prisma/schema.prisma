@@ -1,0 +1,20 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model omega {
+  Weight_g_     String? @map("Weight(g)")
+  Food_100g     String? @map("Food/100g")
+  Omega6_mg_    Int?    @map("Omega6(mg)")
+  Omega3_mg_    Int?    @map("Omega3(mg)")
+  O6_O3_ratio   String? @map("O6/O3_ratio")
+  O6_intake_mg_ Int?    @map("O6_intake(mg)")
+  O3_intake_mg_ Int?    @map("O3_intake(mg)")
+  Overall_ratio String?
+  food_id       Int     @id @default(autoincrement())
+}
