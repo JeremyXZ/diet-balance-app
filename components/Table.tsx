@@ -5,6 +5,8 @@ import DataTable from "react-data-table-component";
 
 export default function FoodTable({ foods, setFoods }) {
   const [weights, setWeights] = useState({});
+  const [totalOmega6, setTotalOmega6] = useState(0);
+  const [totalOmega3, setTotalOmega3] = useState(0);
 
   const handleWeightChange = (foodId, newWeight) => {
     setWeights((prevWeights) => ({
@@ -20,13 +22,19 @@ export default function FoodTable({ foods, setFoods }) {
         const omega6Intake = foodWeight * item.Omega6_mg_;
         const omega3Intake = foodWeight * item.Omega3_mg_;
 
-        const maxIntake = Math.max(omega6Intake, omega3Intake);
-        const minIntake = Math.min(omega6Intake, omega3Intake);
+        //calcuate the new total for both omega6 and omega3 intakes each time a new weight is input
+        let newOmega6Intake = totalOmega6 + omega6Intake;
+        let newOmega3Intake = totalOmega3 + omega3Intake;
+        setTotalOmega6(newOmega6Intake);
+        setTotalOmega3(newOmega3Intake);
+
+        const maxIntake = Math.max(newOmega6Intake, newOmega3Intake);
+        const minIntake = Math.min(newOmega6Intake, newOmega3Intake);
         const ratio = Math.round(maxIntake / minIntake);
 
         // maintain the ratio string in this format: omega6 : omega3
         const overallRatio =
-          omega6Intake > omega3Intake ? `${ratio} : 1` : `1 : ${ratio}`;
+          newOmega6Intake > newOmega3Intake ? `${ratio} : 1` : `1 : ${ratio}`;
 
         console.log(`Overall Ratio for food ID ${foodId}: ${overallRatio}`);
 
