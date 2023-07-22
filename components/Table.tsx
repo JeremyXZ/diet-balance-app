@@ -1,48 +1,44 @@
 "use client";
-import { useEffect, useState } from "react";
-import { getFoods } from "@/utils";
+import { useState } from "react";
+
 import DataTable from "react-data-table-component";
 
-export default function Table() {
-  const [mounted, setMounted] = useState(false);
-  const [foods, setFoods] = useState([]);
-  const [weight, setWeight] = useState("");
-
-  //to ensure hygration takes place after page is loaded
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  const fetchFoods = async () => {
-    const response = await fetch("api/foods");
-    const data = await response.json();
-    console.log(data);
-    setFoods(data);
-  };
-
-  useEffect(() => {
-    fetchFoods();
-  }, []);
+export default function FoodTable({ foods, setFoods }) {
+  const [weights, setWeights] = useState({});
 
   const handleWeightChange = (foodId, newWeight) => {
+    setWeights((prevWeights) => ({
+      ...prevWeights,
+      [foodId]: newWeight,
+    }));
+  };
+
+  const handleEnterKey = (foodId, weight) => {
     const updatedData = foods.map((item) => {
       if (item.food_id === foodId) {
-        const foodWeight = parseFloat(newWeight);
+        const foodWeight = parseFloat(weight);
         const omega6Intake = foodWeight * item.Omega6_mg_;
         const omega3Intake = foodWeight * item.Omega3_mg_;
 
+        console.log(`Omega6 Intake for food ID ${foodId}: ${omega6Intake}`);
+        console.log(`Omega3 Intake for food ID ${foodId}: ${omega3Intake}`);
+
+        const overallRatio =
+          omega6Intake && omega3Intake
+            ? `${(
+                Math.max(omega6Intake, omega3Intake) /
+                Math.min(omega6Intake, omega3Intake)
+              ).toFixed(2)} : 1`
+            : "";
+
+        console.log(`Overall Ratio for food ID ${foodId}: ${overallRatio}`);
+
         return {
           ...item,
-          food_weight: newWeight,
-          omega6_intake: isNaN(omega6Intake) ? "" : omega6Intake.toFixed(2),
-          omega3_intake: isNaN(omega3Intake) ? "" : omega3Intake.toFixed(2),
-          overall_ratio:
-            omega6Intake && omega3Intake
-              ? `${(
-                  Math.max(omega6Intake, omega3Intake) /
-                  Math.min(omega6Intake, omega3Intake)
-                ).toFixed(2)} : 1`
-              : "",
+          food_weight: weight,
+          O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake.toFixed(2),
+          O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake.toFixed(2),
+          Overall_ratio: overallRatio,
         };
       } else {
         return item;
@@ -53,19 +49,25 @@ export default function Table() {
 
   const columns = [
     {
-      name: "Weight(g)",
-      selector: (row) => row.Weight_g_,
+      name: "Weight",
+      selector: (row) => row.food_weight,
       sortable: true,
       editable: true,
       cell: (row) => (
         <input
           type="number"
-          value={weight || ""}
-          onChange={(e) => setWeight(e.target.value)}
-          onBlur={(e) => handleWeightChange(row.food_id, e.target.value)}
+          value={weights[row.food_id] || ""}
+          onChange={(e) => handleWeightChange(row.food_id, e.target.value)}
+          onKeyDown={(e) => {
+            console.log(`Key pressed: ${e.key}`);
+            if (e.key === "Enter") {
+              handleEnterKey(row.food_id, weights[row.food_id]);
+            }
+          }}
         />
       ),
     },
+
     {
       name: "Food/100g",
       selector: (row) => row.Food_100g,
@@ -90,35 +92,20 @@ export default function Table() {
     },
     {
       name: "O6_intake (mg)",
-      selector: (row) => row.O6_intake_mg_,
+      selector: (row) => row.O6_intake_mg_ || "",
       sortable: true,
     },
     {
       name: "O3_intake (mg)",
-      selector: (row) => row.O3_intake_mg_,
+      selector: (row) => row.O3_intake_mg_ || "",
       sortable: true,
     },
     {
       name: "Overall_ratio",
-      selector: (row) => row.Overall_ratio,
+      selector: (row) => row.Overall_ratio || "",
       sortable: true,
     },
   ];
-
-  const data = [
-    {
-      id: 1,
-      title: "Beetlejuice",
-      year: "1988",
-    },
-    {
-      id: 2,
-      title: "Ghostbusters",
-      year: "1984",
-    },
-  ];
-
-  if (!mounted) return <></>;
 
   return (
     <DataTable
@@ -127,6 +114,7 @@ export default function Table() {
       data={foods}
       defaultSortAsc
       defaultSortField="Food_100g"
+      // highlightonhover
     />
   );
 }
