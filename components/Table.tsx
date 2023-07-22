@@ -20,16 +20,13 @@ export default function FoodTable({ foods, setFoods }) {
         const omega6Intake = foodWeight * item.Omega6_mg_;
         const omega3Intake = foodWeight * item.Omega3_mg_;
 
-        console.log(`Omega6 Intake for food ID ${foodId}: ${omega6Intake}`);
-        console.log(`Omega3 Intake for food ID ${foodId}: ${omega3Intake}`);
+        const maxIntake = Math.max(omega6Intake, omega3Intake);
+        const minIntake = Math.min(omega6Intake, omega3Intake);
+        const ratio = Math.round(maxIntake / minIntake);
 
+        // maintain the ratio string in this format: omega6 : omega3
         const overallRatio =
-          omega6Intake && omega3Intake
-            ? `${(
-                Math.max(omega6Intake, omega3Intake) /
-                Math.min(omega6Intake, omega3Intake)
-              ).toFixed(2)} : 1`
-            : "";
+          omega6Intake > omega3Intake ? `${ratio} : 1` : `1 : ${ratio}`;
 
         console.log(`Overall Ratio for food ID ${foodId}: ${overallRatio}`);
 
