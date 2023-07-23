@@ -3,7 +3,7 @@ import { useState } from "react";
 
 import DataTable from "react-data-table-component";
 
-export default function FoodTable({ foods, setFoods }) {
+export default function FoodTable({ foods, setFoods, updateRatios }) {
   const [weights, setWeights] = useState({});
   const [totalOmega6, setTotalOmega6] = useState(0);
   const [totalOmega3, setTotalOmega3] = useState(0);
@@ -41,8 +41,8 @@ export default function FoodTable({ foods, setFoods }) {
         return {
           ...item,
           food_weight: weight,
-          O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake.toFixed(2),
-          O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake.toFixed(2),
+          O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake,
+          O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake,
           Overall_ratio: overallRatio,
         };
       } else {
@@ -50,6 +50,7 @@ export default function FoodTable({ foods, setFoods }) {
       }
     });
     setFoods(updatedData);
+    updateRatios(totalOmega6, totalOmega3);
   };
 
   const columns = [

@@ -1,0 +1,31 @@
+"use client";
+import React from "react";
+import { Doughnut } from "react-chartjs-2";
+import { Chart, registerables } from "chart.js";
+Chart.register(...registerables);
+
+const RatioChart = ({ omega6, omega3 }) => {
+  const data = {
+    labels: ["Omega6", "Omega3"],
+    datasets: [
+      {
+        data: [omega6, omega3],
+        backgroundColor: ["#FF6384", "#36A2EB"],
+        hoverBackgroundColor: ["#FF6384", "#36A2EB"],
+      },
+    ],
+  };
+
+  return (
+    <div style={{ position: "fixed", top: 0, right: 0, zIndex: 1000 }}>
+      <Doughnut
+        data={data}
+        width={150}
+        height={150}
+        options={{ maintainAspectRatio: true }}
+      />
+    </div>
+  );
+};
+
+export default RatioChart;
