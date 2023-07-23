@@ -4,7 +4,12 @@ import { Doughnut } from "react-chartjs-2";
 import { Chart, registerables } from "chart.js";
 Chart.register(...registerables);
 
-const RatioChart = ({ omega6, omega3 }) => {
+interface ChartProps {
+  omega6: number;
+  omega3: number;
+}
+
+const RatioChart = ({ omega6, omega3 }: ChartProps) => {
   const data = {
     labels: ["Omega6", "Omega3"],
     datasets: [

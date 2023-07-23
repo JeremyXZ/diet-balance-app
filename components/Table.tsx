@@ -1,22 +1,54 @@
 "use client";
 import { useState } from "react";
-
 import DataTable from "react-data-table-component";
+import { UpdateRatiosFn } from "@/app/page";
 
-export default function FoodTable({ foods, setFoods, updateRatios }) {
-  const [weights, setWeights] = useState({});
+export interface FoodType {
+  food_weight: string;
+  Food_100g: string;
+  Omega6_mg_: number;
+  Omega3_mg_: number;
+  O6_O3_ratio: string;
+  O6_intake_mg_: number | string;
+  O3_intake_mg_: number | string;
+  Overall_ratio: string;
+  food_id: number;
+}
+
+interface TableProps {
+  foods: FoodType[];
+  setFoods: React.Dispatch<React.SetStateAction<FoodType[]>>;
+  updateRatios: UpdateRatiosFn;
+}
+
+//in order to comform to TableColumn interface (built in react-data-table), whose property "cell" won't allow JSX element
+const RatioCell: React.FC<{ row: FoodType }> = ({ row }) => {
+  let ratio = parseFloat(row.Overall_ratio);
+  return (
+    <span style={{ color: ratio > 4 ? "red" : "green" }}>
+      {row.Overall_ratio}
+    </span>
+  );
+};
+
+export default function FoodTable({
+  foods,
+  setFoods,
+  updateRatios,
+}: TableProps) {
+  const [weights, setWeights] = useState<Record<number, string>>({});
   const [totalOmega6, setTotalOmega6] = useState(0);
   const [totalOmega3, setTotalOmega3] = useState(0);
 
-  const handleWeightChange = (foodId, newWeight) => {
+  const handleWeightChange = (foodId: number, newWeight: string) => {
     setWeights((prevWeights) => ({
       ...prevWeights,
       [foodId]: newWeight,
     }));
   };
 
-  const handleEnterKey = (foodId, weight) => {
-    const updatedData = foods.map((item) => {
+  const handleEnterKey = (foodId: number, weight: string) => {
+    const updatedData: FoodType[] = foods.map((item) => {
       if (item.food_id === foodId) {
         const foodWeight = parseFloat(weight);
         const omega6Intake = foodWeight * item.Omega6_mg_;
@@ -43,11 +75,12 @@ export default function FoodTable({ foods, setFoods, updateRatios }) {
           food_weight: weight,
           O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake,
           O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake,
-          Overall_ratio: (
-            <span style={{ color: ratio > 4 ? "red" : "#0f9015" }}>
-              {overallRatio}
-            </span>
-          ),
+          // Overall_ratio: (
+          //   <span style={{ color: ratio > 4 ? "red" : "#0f9015" }}>
+          //     {overallRatio}
+          //   </span>
+          // ),
+          Overall_ratio: overallRatio,
         };
       } else {
         return item;
@@ -60,10 +93,10 @@ export default function FoodTable({ foods, setFoods, updateRatios }) {
   const columns = [
     {
       name: "Weight",
-      selector: (row) => row.food_weight,
+      selector: (row: FoodType) => row.food_weight,
       sortable: true,
       editable: true,
-      cell: (row) => (
+      cell: (row: FoodType) => (
         <input
           type="number"
           value={weights[row.food_id] || ""}
@@ -80,40 +113,41 @@ export default function FoodTable({ foods, setFoods, updateRatios }) {
 
     {
       name: "Food/100g",
-      selector: (row) => row.Food_100g,
+      selector: (row: FoodType) => row.Food_100g,
       sortable: true,
       width: "350px",
     },
     {
       name: "Omega6 (mg)",
-      selector: (row) => row.Omega6_mg_,
+      selector: (row: FoodType) => row.Omega6_mg_,
       sortable: true,
     },
 
     {
       name: "Omega3 (mg)",
-      selector: (row) => row.Omega3_mg_,
+      selector: (row: FoodType) => row.Omega3_mg_,
       sortable: true,
     },
     {
       name: "O6/O3_ratio",
-      selector: (row) => row.O6_O3_ratio,
+      selector: (row: FoodType) => row.O6_O3_ratio,
       sortable: true,
     },
     {
       name: "O6_intake (mg)",
-      selector: (row) => row.O6_intake_mg_ || "",
+      selector: (row: FoodType) => row.O6_intake_mg_ || "",
       sortable: true,
     },
     {
       name: "O3_intake (mg)",
-      selector: (row) => row.O3_intake_mg_ || "",
+      selector: (row: FoodType) => row.O3_intake_mg_ || "",
       sortable: true,
     },
     {
       name: "Overall_ratio",
-      selector: (row) => row.Overall_ratio || "",
+      selector: (row: FoodType) => row.Overall_ratio || "",
       sortable: true,
+      cell: (row: FoodType) => <RatioCell row={row} />,
     },
   ];
 
@@ -123,8 +157,7 @@ export default function FoodTable({ foods, setFoods, updateRatios }) {
       columns={columns}
       data={foods}
       defaultSortAsc
-      defaultSortField="Food_100g"
-      // highlightonhover
+      defaultSortFieldId="Food_100g"
     />
   );
 }
