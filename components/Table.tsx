@@ -43,7 +43,11 @@ export default function FoodTable({ foods, setFoods, updateRatios }) {
           food_weight: weight,
           O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake,
           O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake,
-          Overall_ratio: overallRatio,
+          Overall_ratio: (
+            <span style={{ color: ratio > 4 ? "red" : "#0f9015" }}>
+              {overallRatio}
+            </span>
+          ),
         };
       } else {
         return item;
