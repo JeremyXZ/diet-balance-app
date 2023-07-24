@@ -1,5 +1,5 @@
 "use client";
-
+import styles from "./home.module.css";
 import FoodTable from "@/components/Table";
 import { useEffect, useState } from "react";
 import RatioChart from "@/components/Chart";
@@ -38,9 +38,10 @@ export default function Home() {
   if (!mounted) return <></>;
   console.log(foods);
   return (
-    <div>
+    <div className={styles.homeContainer}>
       <RatioChart omega6={omega6} omega3={omega3} />
-      <h3>
+
+      <h3 className={styles.h3Style}>
         Please enter the weight of the food in Weight column. The actual amount
         of Omega 3 and Omega6 and the aggregate ratio (healthy ratio in green,
         unhealthy ratio in red) will be shown on the same row to the right. The

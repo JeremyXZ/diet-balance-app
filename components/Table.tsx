@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import DataTable from "react-data-table-component";
+import DataTable, { createTheme } from "react-data-table-component";
 import { UpdateRatiosFn } from "@/app/page";
 
 export interface FoodType {
@@ -30,6 +30,33 @@ const RatioCell: React.FC<{ row: FoodType }> = ({ row }) => {
     </span>
   );
 };
+
+// createTheme creates a new theme named solarized that overrides the build in dark theme
+createTheme(
+  "solarized",
+  {
+    text: {
+      primary: "#268bd2",
+      secondary: "#2aa198",
+    },
+    background: {
+      default: "#002b36",
+    },
+    context: {
+      background: "#cb4b16",
+      text: "#FFFFFF",
+    },
+    divider: {
+      default: "#073642",
+    },
+    action: {
+      button: "rgba(0,0,0,.54)",
+      hover: "rgba(0,0,0,.08)",
+      disabled: "rgba(0,0,0,.12)",
+    },
+  },
+  "dark"
+);
 
 export default function FoodTable({
   foods,
@@ -96,6 +123,7 @@ export default function FoodTable({
       selector: (row: FoodType) => row.food_weight,
       sortable: true,
       editable: true,
+      width: "200px",
       cell: (row: FoodType) => (
         <input
           type="number"
@@ -115,7 +143,7 @@ export default function FoodTable({
       name: "Food/100g",
       selector: (row: FoodType) => row.Food_100g,
       sortable: true,
-      width: "350px",
+      width: "200px",
     },
     {
       name: "Omega6 (mg)",
@@ -158,6 +186,7 @@ export default function FoodTable({
       data={foods}
       defaultSortAsc
       defaultSortFieldId="Food_100g"
+      theme="solarized"
     />
   );
 }
