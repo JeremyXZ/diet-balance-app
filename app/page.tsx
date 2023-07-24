@@ -1,13 +1,28 @@
 "use client";
-import styles from "./home.module.css";
+
 import FoodTable from "@/components/Table";
 import { useEffect, useState } from "react";
 import RatioChart from "@/components/Chart";
 import { FoodType } from "@/components/Table";
+import styled from "styled-components";
 
 export interface UpdateRatiosFn {
   (newOmega6: number, newOmega3: number): void;
 }
+
+// Styled components
+const HomeContainer = styled.div`
+  width: 80%;
+  margin: 0 auto;
+
+  h2 {
+    width: 100%;
+    margin: 0 auto;
+    text-align: center;
+    color: #000080;
+    margin: 25px 0;
+  }
+`;
 
 export default function Home() {
   const [mounted, setMounted] = useState(false);
@@ -38,21 +53,21 @@ export default function Home() {
   if (!mounted) return <></>;
   console.log(foods);
   return (
-    <div className={styles.homeContainer}>
+    <HomeContainer>
       <RatioChart omega6={omega6} omega3={omega3} />
 
-      <h3 className={styles.h3Style}>
+      <h2>
         Please enter the weight of the food in Weight column. The actual amount
         of Omega 3 and Omega6 and the aggregate ratio (healthy ratio in green,
         unhealthy ratio in red) will be shown on the same row to the right. The
         running aggregate ratio will be shown in the ratio bar on top of this
         page.
-      </h3>
+      </h2>
       <FoodTable
         foods={foods}
         setFoods={setFoods}
         updateRatios={updateRatios}
       />
-    </div>
+    </HomeContainer>
   );
 }
