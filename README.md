@@ -1,14 +1,22 @@
+## Demo site: https://diet-balance-app.vercel.app/
+
 This app aims to inform users about the combined ratio of omega-6 intake to omega-3 intake in the foods they intend to consume and alert them to unhealthy ratios. All the food facts are compiled manually by citing the data from myfooddata website.
 
-# Planned main features and usage:
+# Main features and usage:
 
-- A sortable table displaying common foods, their default content, and ratio of omega-6 to omega-3, as well as actual amounts based on the weight of the food and the combined ratio.
-- Users can input the weight (in grams) in the first column and view the results on the same row.
-- A large bar chart showing the ratio of omega-6 to omega-3 will be fixed on top of the page. Its color will change depending on the cutoff point: red if the ratio is larger than 4:1 (omega-6:omega-3), and green if the ratio is smaller.
-- PostgreSQL (cloud-based) will be used to store the food information.
-- Next.js will be used to render the UI and handle API calls.
-- Prisma will be used to connect to the database in this Next.js project.
-- React data table will be used to construct the food table.
+- A sortable (for all columns) table displays common foods, their default content, and ratio of omega-6 to omega-3, actual amounts based on the weight of the food and the aggregate ratio.
+- Users can enter the weight (in grams) in the first column and see the results immediately on the same row. A red number indicates an unhealthy Omega-6:Omega-3 ratio, which is larger than the recommended 4:1. On the other hand, a green number means a healthy ratio.
+- Users can easily toggle the display of Omega-3 and Omega-6 content/intake columns by clicking "Toggle Intake Columns." This feature is particularly helpful for users on smaller screens.
+- A doughnut chart will display the relative portions of omega-6 and omega-3 at the top of the page.
+
+# Technologies Used
+
+- Next.js13 and Typescript: UI rendering and API handling.
+- PostgreSQL (cloud-based): Data storage for food information.
+- Prisma: Database connection for Next.js.
+- React data table: Constructing the food table.
+- react-chartjs-2: Generating doughnut charts.
+- pgAdmin4: Creating and managing food data.
 
 # Below is the Original README
 
