@@ -16,9 +16,10 @@ const HomeContainer = styled.div`
   margin: 0 auto;
 
   h2 {
-    width: 100%;
+    width: 90%;
     margin: 0 auto;
-    text-align: center;
+    font-family: sans-serif;
+    text-align: left;
     color: #000080;
     margin: 25px 0;
   }
