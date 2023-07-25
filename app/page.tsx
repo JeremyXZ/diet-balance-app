@@ -22,7 +22,6 @@ const HomeContainer = styled.div`
     color: #000080;
     margin: 25px 0;
   }
-  @media (min-width: 769px);
 `;
 
 const TableContainer = styled.div`
