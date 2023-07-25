@@ -14,22 +14,28 @@ export interface UpdateRatiosFn {
 const HomeContainer = styled.div`
   width: 80%;
   margin: 0 auto;
-
-  h2 {
-    width: 90%;
-    margin: 0 auto;
-    font-family: sans-serif;
-    text-align: left;
-    color: #000080;
-    margin: 25px 0;
-  }
 `;
 
-const TableContainer = styled.div`
-  @media (max-width: 1350px) {
-    .rdt_TableCol[data-tag="O6_intake (mg)"] {
-      display: none;
-    }
+// const TableContainer = styled.div`
+//   @media (max-width: 1350px) {
+//     .rdt_TableCol[data-tag="O6_intake (mg)"] {
+//       display: none;
+//     }
+//   }
+// `;
+
+const TextContainer = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  font-family: sans-serif;
+  text-align: left;
+  color: #000080;
+  margin: 25px 0;
+
+  p {
+    /* width: 90%; */
+    font-size: 1.125rem;
+    text-align: left;
   }
 `;
 export default function Home() {
@@ -63,20 +69,24 @@ export default function Home() {
   return (
     <HomeContainer>
       <RatioChart omega6={omega6} omega3={omega3} />
-      <h2>
-        Please enter the weight of the food in Weight column. The actual amount
-        of Omega 3 and Omega6 and the aggregate ratio (healthy ratio in green,
-        unhealthy ratio in red) will be shown on the same row to the right. The
-        running aggregate ratio will be shown in the ratio bar on top of this
-        page.
-      </h2>
-      <TableContainer>
-        <FoodTable
-          foods={foods}
-          setFoods={setFoods}
-          updateRatios={updateRatios}
-        />
-      </TableContainer>
+      <TextContainer>
+        <h2>Instruction:</h2>
+        <p>
+          Please type the weight (in grams) in the first column and press Enter.
+          You will see the results immediately on the same row. A recommended
+          Omega-6:Omega-3 ratio is 4: 1. A red number indicates an unhealthy
+          ratio and a green number means a healthy one. The doughnut chart shows
+          the relative portions of Omega-6 and Omega-3. Click the Toggle button
+          to hide and show intakes columns and click table headers to sort a
+          column.
+        </p>
+      </TextContainer>
+
+      <FoodTable
+        foods={foods}
+        setFoods={setFoods}
+        updateRatios={updateRatios}
+      />
     </HomeContainer>
   );
 }
