@@ -2,6 +2,7 @@
 import { useState } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
 import { UpdateRatiosFn } from "@/app/page";
+import { ButtonStyle } from "./ButtonStyle";
 
 export interface FoodType {
   food_weight: string;
@@ -31,33 +32,6 @@ const RatioCell: React.FC<{ row: FoodType }> = ({ row }) => {
   );
 };
 
-// createTheme creates a new theme named solarized that overrides the build in dark theme
-createTheme(
-  "solarized",
-  {
-    text: {
-      primary: "#268bd2",
-      secondary: "#2aa198",
-    },
-    background: {
-      default: "#002b36",
-    },
-    context: {
-      background: "#cb4b16",
-      text: "#FFFFFF",
-    },
-    divider: {
-      default: "#073642",
-    },
-    action: {
-      button: "rgba(0,0,0,.54)",
-      hover: "rgba(0,0,0,.08)",
-      disabled: "rgba(0,0,0,.12)",
-    },
-  },
-  "dark"
-);
-
 export default function FoodTable({
   foods,
   setFoods,
@@ -66,6 +40,7 @@ export default function FoodTable({
   const [weights, setWeights] = useState<Record<number, string>>({});
   const [totalOmega6, setTotalOmega6] = useState(0);
   const [totalOmega3, setTotalOmega3] = useState(0);
+  const [hide, setHide] = useState(false);
 
   const handleWeightChange = (foodId: number, newWeight: string) => {
     setWeights((prevWeights) => ({
@@ -102,11 +77,6 @@ export default function FoodTable({
           food_weight: weight,
           O6_intake_mg_: isNaN(omega6Intake) ? "" : omega6Intake,
           O3_intake_mg_: isNaN(omega3Intake) ? "" : omega3Intake,
-          // Overall_ratio: (
-          //   <span style={{ color: ratio > 4 ? "red" : "#0f9015" }}>
-          //     {overallRatio}
-          //   </span>
-          // ),
           Overall_ratio: overallRatio,
         };
       } else {
@@ -117,17 +87,50 @@ export default function FoodTable({
     updateRatios(totalOmega6, totalOmega3);
   };
 
+  //configurate the table:
+
+  // createTheme creates a new theme named solarized that overrides the build in dark theme
+  createTheme(
+    "solarized",
+    {
+      text: {
+        primary: "#268bd2",
+        secondary: "#2aa198",
+      },
+      background: {
+        default: "#002b36",
+      },
+      context: {
+        background: "#cb4b16",
+        text: "#FFFFFF",
+      },
+      divider: {
+        default: "#073642",
+      },
+      action: {
+        button: "rgba(0,0,0,.54)",
+        hover: "rgba(0,0,0,.08)",
+        disabled: "rgba(0,0,0,.12)",
+      },
+      rows: {
+        fontSize: "29px",
+      },
+    },
+    "dark"
+  );
+
   const columns = [
     {
       name: "Weight",
       selector: (row: FoodType) => row.food_weight,
       sortable: true,
       editable: true,
-      width: "200px",
+      // width: "120px",
       cell: (row: FoodType) => (
         <input
           type="number"
           value={weights[row.food_id] || ""}
+          style={{ maxWidth: "80px" }}
           onChange={(e) => handleWeightChange(row.food_id, e.target.value)}
           onKeyDown={(e) => {
             console.log(`Key pressed: ${e.key}`);
@@ -143,18 +146,20 @@ export default function FoodTable({
       name: "Food/100g",
       selector: (row: FoodType) => row.Food_100g,
       sortable: true,
-      width: "200px",
+      minWidth: "300px",
     },
     {
       name: "Omega6 (mg)",
       selector: (row: FoodType) => row.Omega6_mg_,
       sortable: true,
+      omit: hide,
     },
 
     {
       name: "Omega3 (mg)",
       selector: (row: FoodType) => row.Omega3_mg_,
       sortable: true,
+      omit: hide,
     },
     {
       name: "O6/O3_ratio",
@@ -162,31 +167,54 @@ export default function FoodTable({
       sortable: true,
     },
     {
-      name: "O6_intake (mg)",
+      name: "O6_intake",
       selector: (row: FoodType) => row.O6_intake_mg_ || "",
       sortable: true,
+      omit: hide,
     },
     {
-      name: "O3_intake (mg)",
+      name: "O3_intake",
       selector: (row: FoodType) => row.O3_intake_mg_ || "",
       sortable: true,
+      omit: hide,
     },
     {
       name: "Overall_ratio",
       selector: (row: FoodType) => row.Overall_ratio || "",
       sortable: true,
+
       cell: (row: FoodType) => <RatioCell row={row} />,
     },
   ];
 
+  const customStyles = {
+    headRow: {
+      style: {
+        fontSize: "1.125rem",
+        fontWeight: "bold",
+      },
+    },
+    cells: {
+      style: {
+        fontSize: "1.125rem",
+      },
+    },
+  };
+
   return (
-    <DataTable
-      title="Food Table"
-      columns={columns}
-      data={foods}
-      defaultSortAsc
-      defaultSortFieldId="Food_100g"
-      theme="solarized"
-    />
+    <>
+      <ButtonStyle onClick={() => setHide(!hide)}>
+        Toggle Intake Coulmns
+      </ButtonStyle>
+      <DataTable
+        title="Food Table"
+        columns={columns}
+        data={foods}
+        defaultSortAsc
+        defaultSortFieldId="Food_100g"
+        theme="solarized"
+        customStyles={customStyles}
+      />
+    </>
   );
 }

@@ -22,8 +22,16 @@ const HomeContainer = styled.div`
     color: #000080;
     margin: 25px 0;
   }
+  @media (min-width: 769px);
 `;
 
+const TableContainer = styled.div`
+  @media (max-width: 1350px) {
+    .rdt_TableCol[data-tag="O6_intake (mg)"] {
+      display: none;
+    }
+  }
+`;
 export default function Home() {
   const [mounted, setMounted] = useState(false);
   const [foods, setFoods] = useState<FoodType[]>([]);
@@ -55,7 +63,6 @@ export default function Home() {
   return (
     <HomeContainer>
       <RatioChart omega6={omega6} omega3={omega3} />
-
       <h2>
         Please enter the weight of the food in Weight column. The actual amount
         of Omega 3 and Omega6 and the aggregate ratio (healthy ratio in green,
@@ -63,11 +70,13 @@ export default function Home() {
         running aggregate ratio will be shown in the ratio bar on top of this
         page.
       </h2>
-      <FoodTable
-        foods={foods}
-        setFoods={setFoods}
-        updateRatios={updateRatios}
-      />
+      <TableContainer>
+        <FoodTable
+          foods={foods}
+          setFoods={setFoods}
+          updateRatios={updateRatios}
+        />
+      </TableContainer>
     </HomeContainer>
   );
 }
