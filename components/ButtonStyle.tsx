@@ -7,6 +7,7 @@ export const ButtonStyle = styled.button`
   border: none;
   padding: 0 26px;
   margin-bottom: 10px;
+  margin-right: 10px;
   height: 45px;
   line-height: 45px;
   border-radius: 7px;
