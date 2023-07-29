@@ -16,14 +16,6 @@ const HomeContainer = styled.div`
   margin: 0 auto;
 `;
 
-// const TableContainer = styled.div`
-//   @media (max-width: 1350px) {
-//     .rdt_TableCol[data-tag="O6_intake (mg)"] {
-//       display: none;
-//     }
-//   }
-// `;
-
 const TextContainer = styled.div`
   width: 90%;
   margin: 0 auto;
@@ -64,6 +56,10 @@ export default function Home() {
     setMounted(true);
   }, []);
 
+  const refetchFoods = () => {
+    fetchFoods();
+  };
+
   if (!mounted) return <></>;
   console.log(foods);
   return (
@@ -86,6 +82,7 @@ export default function Home() {
         foods={foods}
         setFoods={setFoods}
         updateRatios={updateRatios}
+        refetchFoods={refetchFoods}
       />
     </HomeContainer>
   );

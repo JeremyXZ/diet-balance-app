@@ -20,6 +20,7 @@ interface TableProps {
   foods: FoodType[];
   setFoods: React.Dispatch<React.SetStateAction<FoodType[]>>;
   updateRatios: UpdateRatiosFn;
+  refetchFoods: () => void;
 }
 
 //in order to comform to TableColumn interface (built in react-data-table), whose property "cell" won't allow JSX element
@@ -36,6 +37,7 @@ export default function FoodTable({
   foods,
   setFoods,
   updateRatios,
+  refetchFoods,
 }: TableProps) {
   const [weights, setWeights] = useState<Record<number, string>>({});
   const [totalOmega6, setTotalOmega6] = useState(0);
@@ -87,6 +89,19 @@ export default function FoodTable({
     updateRatios(totalOmega6, totalOmega3);
   };
 
+  const showResults = () => {
+    const weightAddedFoods = foods.filter(
+      (food) => food.food_weight !== "" && food.food_weight != null
+    );
+    setFoods(weightAddedFoods);
+  };
+
+  const resetTable = () => {
+    refetchFoods();
+    setWeights({});
+    updateRatios(0, 0);
+  };
+
   //configurate the table:
 
   // createTheme creates a new theme named solarized that overrides the build in dark theme
@@ -125,7 +140,6 @@ export default function FoodTable({
       selector: (row: FoodType) => row.food_weight,
       sortable: true,
       editable: true,
-      // width: "120px",
       cell: (row: FoodType) => (
         <input
           type="number"
@@ -206,6 +220,8 @@ export default function FoodTable({
       <ButtonStyle onClick={() => setHide(!hide)}>
         Toggle Intake Coulmns
       </ButtonStyle>
+      <ButtonStyle onClick={showResults}>Show Results</ButtonStyle>
+      <ButtonStyle onClick={resetTable}>Reset Table</ButtonStyle>
       <DataTable
         title="Food Table"
         columns={columns}
