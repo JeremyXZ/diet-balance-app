@@ -224,8 +224,7 @@ export default function FoodTable({
       <ButtonStyle onClick={() => setHide(!hide)}>
         Toggle Intake Coulmns
       </ButtonStyle>
-      <ButtonStyle onClick={showResults}>Show Results</ButtonStyle>
-      {/* <ButtonStyle onClick={() => downloadCSV()}>Download Results</ButtonStyle> */}
+      <ButtonStyle onClick={showResults}>Show/Save Results</ButtonStyle>
       <ButtonStyle onClick={resetTable}>Reset Table</ButtonStyle>
       <DataTable
         title="Food Table"

@@ -7,6 +7,7 @@ This app aims to inform users about the combined ratio of omega-6 intake to omeg
 - A sortable (for all columns) table displays common foods, their default content, and ratio of omega-6 to omega-3, actual amounts based on the weight of the food and the aggregate ratio.
 - Users can enter (type a number and click "Enter") the weight (in grams) in the first column and see the results immediately on the same row. A red number indicates an unhealthy Omega-6:Omega-3 ratio, which is larger than the recommended 4:1. On the other hand, a green number means a healthy ratio.
 - Users can easily toggle the display of Omega-3 and Omega-6 content/intake columns by clicking "Toggle Intake Columns." This feature is particularly helpful for users on smaller screens.
+- Users can click "Show/Save Results" button to show only the checked foods and/or save the results into a csv file.
 - A doughnut chart will display the relative portions of omega-6 and omega-3 at the top of the page.
 
 # Technologies Used
