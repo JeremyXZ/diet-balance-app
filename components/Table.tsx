@@ -3,6 +3,7 @@ import { useState } from "react";
 import DataTable, { createTheme } from "react-data-table-component";
 import { UpdateRatiosFn } from "@/app/page";
 import { ButtonStyle } from "./ButtonStyle";
+import { downloadCSV } from "@/lib/downloadData";
 
 export interface FoodType {
   food_weight: string;
@@ -94,6 +95,9 @@ export default function FoodTable({
       (food) => food.food_weight !== "" && food.food_weight != null
     );
     setFoods(weightAddedFoods);
+    if (window.confirm("Do you want to save the results")) {
+      downloadCSV(weightAddedFoods);
+    }
   };
 
   const resetTable = () => {
@@ -221,6 +225,7 @@ export default function FoodTable({
         Toggle Intake Coulmns
       </ButtonStyle>
       <ButtonStyle onClick={showResults}>Show Results</ButtonStyle>
+      {/* <ButtonStyle onClick={() => downloadCSV()}>Download Results</ButtonStyle> */}
       <ButtonStyle onClick={resetTable}>Reset Table</ButtonStyle>
       <DataTable
         title="Food Table"
